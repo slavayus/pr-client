@@ -38,6 +38,12 @@ class SampleClient {
                         System.out.print("Enter new word description: ");
                         dictionary.setDescription(br.readLine());
                         break;
+                    case "update":
+                        System.out.print("Enter word: ");
+                        dictionary.setWord(br.readLine());
+                        System.out.print("Enter word new description: ");
+                        dictionary.setDescription(br.readLine());
+                        break;
                 }
                 request.setDictionary(dictionary);
                 out.writeUTF(new Gson().toJson(request));
