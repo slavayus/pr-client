@@ -18,20 +18,25 @@ class SampleClient {
             while (!socket.isOutputShutdown()) {
                 System.out.print("Enter command: ");
                 String clientCommand = br.readLine();
+                Request request = new Request();
+                request.setCommand(clientCommand);
+                Dictionary dictionary = new Dictionary();
                 switch (clientCommand) {
                     case "quit":
                         break loop;
                     case "select":
                         System.out.print("Enter searching word: ");
-                        Request request = new Request();
-                        request.setCommand(clientCommand);
-                        Dictionary dictionary = new Dictionary();
                         dictionary.setWord(br.readLine());
                         request.setDictionary(dictionary);
-                        out.writeUTF(new Gson().toJson(request));
-                        out.flush();
+                        break;
+                    case "find":
+                        System.out.print("Enter searching word: ");
+                        dictionary.setWord(br.readLine());
+                        request.setDictionary(dictionary);
                         break;
                 }
+                out.writeUTF(new Gson().toJson(request));
+                out.flush();
                 System.out.println("reading...");
                 System.out.println(in.readUTF());
             }
