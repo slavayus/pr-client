@@ -3,11 +3,17 @@ import data.Dictionary;
 import data.Request;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.util.Properties;
 
 class SampleClient {
-    public static void main(String[] args) {
-        try (Socket socket = new Socket("0.0.0.0", 7007);
+    private static final String PROP_FILE_NAME = "server.properties";
+    private static Properties prop;
+
+    public static void main(String[] args) throws IOException {
+        loadProperties();
+        try (Socket socket = new Socket(InetAddress.getByName(prop.getProperty("server.address")), Integer.parseInt(prop.getProperty("server.port")));
              BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
              DataOutputStream out = new DataOutputStream(socket.getOutputStream());
              DataInputStream in = new DataInputStream(socket.getInputStream())) {
@@ -58,6 +64,16 @@ class SampleClient {
             System.out.println("Closing connections & channels on clentSide - DONE.");
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void loadProperties() throws IOException {
+        prop = new Properties();
+        InputStream inputStream = SampleClient.class.getClassLoader().getResourceAsStream(PROP_FILE_NAME);
+        if (inputStream != null) {
+            prop.load(inputStream);
+        } else {
+            throw new FileNotFoundException("property file '" + PROP_FILE_NAME + "' not found in the classpath");
         }
     }
 }
