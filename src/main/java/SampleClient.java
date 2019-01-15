@@ -44,6 +44,10 @@ class SampleClient {
                         System.out.print("Enter word new description: ");
                         dictionary.setDescription(br.readLine());
                         break;
+                    case "delete":
+                        System.out.print("Enter word: ");
+                        dictionary.setWord(br.readLine());
+                        break;
                 }
                 request.setDictionary(dictionary);
                 out.writeUTF(new Gson().toJson(request));
