@@ -29,6 +29,9 @@ class SampleClient {
                 Dictionary dictionary = new Dictionary();
                 switch (clientCommand) {
                     case "quit":
+                        out.writeUTF(new Gson().toJson(request));
+                        out.flush();
+                        socket.close();
                         break loop;
                     case "select":
                         System.out.print("Enter searching word: ");
