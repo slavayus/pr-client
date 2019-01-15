@@ -27,14 +27,19 @@ class SampleClient {
                     case "select":
                         System.out.print("Enter searching word: ");
                         dictionary.setWord(br.readLine());
-                        request.setDictionary(dictionary);
                         break;
                     case "find":
                         System.out.print("Enter searching word: ");
                         dictionary.setWord(br.readLine());
-                        request.setDictionary(dictionary);
+                        break;
+                    case "insert":
+                        System.out.print("Enter new word: ");
+                        dictionary.setWord(br.readLine());
+                        System.out.print("Enter new word description: ");
+                        dictionary.setDescription(br.readLine());
                         break;
                 }
+                request.setDictionary(dictionary);
                 out.writeUTF(new Gson().toJson(request));
                 out.flush();
                 System.out.println("reading...");
