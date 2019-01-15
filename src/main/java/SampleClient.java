@@ -1,3 +1,6 @@
+import com.google.gson.Gson;
+import data.Request;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -16,8 +19,9 @@ class SampleClient {
                 if (br.ready()) {
                     System.out.println("Client start writing in channel...");
                     String clientCommand = br.readLine();
-
-                    out.writeUTF(clientCommand);
+                    Request request = new Request();
+                    request.setCommand(clientCommand);
+                    out.writeUTF(new Gson().toJson(request));
                     out.flush();
                     System.out.println("Client sent message " + clientCommand + " to server.");
                     if (clientCommand.equalsIgnoreCase("quit")) {
