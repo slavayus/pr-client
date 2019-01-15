@@ -1,4 +1,5 @@
 import com.google.gson.Gson;
+import data.Dictionary;
 import data.Request;
 
 import java.io.*;
@@ -12,28 +13,27 @@ class SampleClient {
              DataInputStream in = new DataInputStream(socket.getInputStream())) {
 
             System.out.println("Client connected to socket.");
-            System.out.println();
-            System.out.println("Client writing channel = out & reading channel = in initialized.");
 
+            loop:
             while (!socket.isOutputShutdown()) {
-                if (br.ready()) {
-                    System.out.println("Client start writing in channel...");
-                    String clientCommand = br.readLine();
-                    Request request = new Request();
-                    request.setCommand(clientCommand);
-                    out.writeUTF(new Gson().toJson(request));
-                    out.flush();
-                    System.out.println("Client sent message " + clientCommand + " to server.");
-                    if (clientCommand.equalsIgnoreCase("quit")) {
+                System.out.print("Enter command: ");
+                String clientCommand = br.readLine();
+                switch (clientCommand) {
+                    case "quit":
+                        break loop;
+                    case "select":
+                        System.out.print("Enter searching word: ");
+                        Request request = new Request();
+                        request.setCommand(clientCommand);
+                        Dictionary dictionary = new Dictionary();
+                        dictionary.setWord(br.readLine());
+                        request.setDictionary(dictionary);
+                        out.writeUTF(new Gson().toJson(request));
+                        out.flush();
                         break;
-                    }
-
-                    System.out.println("Client sent message & start waiting for data from server...");
-                    if (in.available() > 0) {
-                        System.out.println("reading...");
-                        System.out.println(in.readUTF());
-                    }
                 }
+                System.out.println("reading...");
+                System.out.println(in.readUTF());
             }
             System.out.println("Closing connections & channels on clentSide - DONE.");
         } catch (IOException e) {
